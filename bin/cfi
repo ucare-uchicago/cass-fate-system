@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# ------------------------------------------------------
+#cassandra_home=/home/jinsu/research/cass-prj/trunk/stable_cass
+cassandra_home=$(awk '/Cassandra run homepath/ {save=$NF} END {print save}' /tmp/cassandra-fi-build-info)
+
+# /////////////////////////////////////////
+# not a portable code
+# napc
+# change the path appropriately
+#///////////////////////////////////////////
+CASSANDRA_INCLUDE=$cassandra_home/bin/cfi.in.sh
+#CASSANDRA_INCLUDE=`dirname $0`/..
+
+export CASSANDRA_INCLUDE
+cd ${cassandra_home}
+
+#/////////////////////////////////////////////
+. $CASSANDRA_INCLUDE
+
+echo ""
+echo "$JVM_OPTS"
+echo ""
+echo "-----SEPERATOR-----"
+echo ""
+echo "$CLASSPATH"
+echo ""
+
+
+JAVA=`which java`
+exec $JAVA $JVM_OPTS -cp $CLASSPATH org.fi.FMDriver > /tmp/fi/logs/fi.out  & 
+
